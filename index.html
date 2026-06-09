@@ -1,20 +1,61 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 
 <head>
   <meta charset="UTF-8">
-  <title>Polla Mundial</title>
+  <title>Polla Mundial 2026</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+
+    body{
+      font-family: Arial;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .partido{
+      border:1px solid #ddd;
+      padding:15px;
+      margin-bottom:15px;
+      border-radius:8px;
+    }
+
+    .equipos{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    input[type=number]{
+      width:60px;
+    }
+
+    .cerrado{
+      color:red;
+      font-weight:bold;
+    }
+
+  </style>
+
 </head>
 
 <body>
 
-  <h1>Polla Mundial 2026</h1>
+  <h1>⚽ Polla Mundial 2026</h1>
 
-  <p>Ingresa tu nombre:</p>
+  <p>
 
-  <input id="nombre">
+    Nombre:
 
-  <br><br>
+    <input
+      id="nombre"
+      type="text"
+    >
+
+  </p>
 
   <div id="partidos"></div>
 
@@ -24,7 +65,8 @@
     Enviar pronósticos
   </button>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <p id="mensaje"></p>
+
   <script src="app.js"></script>
 
 </body>
