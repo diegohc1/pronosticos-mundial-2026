@@ -17,6 +17,17 @@ const supabaseClient =
 
 
 // =====================================
+// =====================================
+
+
+// =====================================
+// VARIABLES
+// =====================================
+
+let partidosVisibles = [];
+
+
+// =====================================
 // CARGAR PARTIDOS
 // =====================================
 
@@ -24,131 +35,240 @@ async function cargarPartidos() {
 
   const { data, error } =
     await supabaseClient
-      .from('partidos')
-      .select('*')
-      .eq('visible', true);
+      .from("partidos")
+      .select("*")
+      .order("fecha_hora");
 
   if(error){
+
     console.error(error);
     return;
+
   }
 
-  const contenedor =
-    document.getElementById("partidos");
+  console.log(data);
 
-  contenedor.innerHTML = "";
+  partidosVisibles = data;
 
-  data.forEach(partido => {
+  mostrarPartidos();
 
-    contenedor.innerHTML += `
+}
 
-      <div style="margin-bottom:20px">
+
+// =====================================
+// MOSTRAR PARTIDOS
+// =====================================
+
+function mostrarPartidos(){
+
+  const div =
+    document.getElementById(
+      "partidos"
+    );
+
+  div.innerHTML = "";
+
+  partidosVisibles.forEach(
+    partido => {
+
+      const fecha =
+        new Date(
+          partido.fecha_hora
+        );
+
+      const cerrado =
+        fecha <= new Date();
+
+      div.innerHTML += `
+
+      <div class="partido">
 
         <h3>
-          ${partido.local} vs ${partido.visita}
+
+          ${partido.equipo1}
+
+          vs
+
+          ${partido.equipo2}
+
         </h3>
 
-        <input
-          type="number"
-          min="0"
-          id="local_${partido.match_id}"
-          placeholder="${partido.local}"
-        >
+        <p>
 
-        -
+          ${fecha.toLocaleString()}
 
-        <input
-          type="number"
-          min="0"
-          id="visita_${partido.match_id}"
-          placeholder="${partido.visita}"
-        >
+        </p>
+
+        <p>
+
+          Grupo ${partido.grupo}
+
+        </p>
+
+        ${
+          cerrado
+
+          ?
+
+          `<p class="cerrado">
+
+            Pronóstico cerrado
+
+          </p>`
+
+          :
+
+          `
+
+          <div class="equipos">
+
+            <input
+              type="number"
+              min="0"
+              id="p1_${partido.match_id}"
+            >
+
+            -
+
+            <input
+              type="number"
+              min="0"
+              id="p2_${partido.match_id}"
+            >
+
+          </div>
+
+          `
+
+        }
 
       </div>
 
-    `;
+      `;
 
-  });
+    }
+  );
 
 }
 
+
 // =====================================
-// GUARDAR PRONÓSTICOS
+// ENVIAR PRONÓSTICOS
 // =====================================
 
-async function enviarPronosticos() {
+async function enviarPronosticos(){
 
   const nombre =
-    document.getElementById("nombre").value;
+    document
+      .getElementById(
+        "nombre"
+      )
+      .value;
 
-  if(nombre === ""){
+  if(!nombre){
 
-    alert("Ingresa tu nombre");
+    alert(
+      "Ingrese su nombre"
+    );
 
     return;
+
   }
 
-  // Volvemos a leer los partidos
+  const registros = [];
 
-  const { data: partidos } =
-    await supabaseClient
-      .from('partidos')
-      .select('*')
-      .eq('visible', true);
+  partidosVisibles.forEach(
+    partido => {
 
-  const pronosticos = [];
+      const g1 =
+        document.getElementById(
+          `p1_${partido.match_id}`
+        );
 
-  partidos.forEach(partido => {
+      const g2 =
+        document.getElementById(
+          `p2_${partido.match_id}`
+        );
 
-    const predLocal =
-      document.getElementById(
-        `local_${partido.match_id}`
-      ).value;
+      if(
+        g1 &&
+        g2 &&
+        g1.value !== "" &&
+        g2.value !== ""
+      ){
 
-    const predVisita =
-      document.getElementById(
-        `visita_${partido.match_id}`
-      ).value;
+        registros.push({
 
-    pronosticos.push({
+          usuario: nombre,
 
-      usuario: nombre,
+          match_id:
+            partido.match_id,
 
-      match_id:
-        partido.match_id,
+          pred_local:
+            Number(
+              g1.value
+            ),
 
-      pred_local:
-        Number(predLocal),
+          pred_visita:
+            Number(
+              g2.value
+            ),
 
-      pred_visita:
-        Number(predVisita)
+          fecha_envio:
+            new Date()
 
-    });
+        });
 
-  });
+      }
 
-  console.log(pronosticos);
+    }
+  );
+
+  if(
+    registros.length === 0
+  ){
+
+    alert(
+      "No hay pronósticos para enviar"
+    );
+
+    return;
+
+  }
 
   const { error } =
     await supabaseClient
-      .from('pronosticos')
-      .insert(pronosticos);
+      .from(
+        "pronosticos"
+      )
+      .insert(
+        registros
+      );
 
   if(error){
 
     console.error(error);
 
-    alert("Error al guardar");
+    alert(
+      "Error al guardar"
+    );
 
     return;
+
   }
 
-  alert("Pronósticos guardados");
+  document
+    .getElementById(
+      "mensaje"
+    )
+    .innerHTML =
+      "✅ Pronósticos guardados";
 
 }
 
+
 // =====================================
-// INICIAR APP
+// INICIAR
 // =====================================
 
 cargarPartidos();
