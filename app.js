@@ -68,35 +68,50 @@ async function cargarPartidos() {
       }
 
   const ahora = new Date();
+//
+ partidosVisibles =
+  data.filter(partido => {
 
-  partidosVisibles =
-    data.filter(partido => {
+    const fecha =
+      new Date(
+        partido.fecha_hora
+      );
 
-      const fecha =
-        new Date(
-          partido.fecha_hora
-        );
+    const despues =
+      new Date(fecha);
 
-const apertura =
-  new Date(fecha);
+    despues.setHours(
+      despues.getHours() + 15
+    );
 
-apertura.setHours(
-  apertura.getHours() - 24
-);
+    const hoy =
+      new Date();
 
-const despues =
-  new Date(fecha);
+    const inicioHoy =
+      new Date(
+        hoy.getFullYear(),
+        hoy.getMonth(),
+        hoy.getDate()
+      );
 
-despues.setHours(
-  despues.getHours() + 15
-);
+    const inicioPasadoManana =
+      new Date(
+        hoy.getFullYear(),
+        hoy.getMonth(),
+        hoy.getDate() + 2
+      );
 
-return (
-  ahora >= apertura &&
-  ahora <= despues
-);
+    return (
 
-    });
+      fecha >= inicioHoy &&
+      fecha < inicioPasadoManana &&
+
+      ahora <= despues
+
+    );
+
+  });
+//
 
   partidosVisibles.sort(
     (a,b) =>
