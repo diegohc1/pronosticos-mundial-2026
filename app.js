@@ -77,24 +77,24 @@ async function cargarPartidos() {
           partido.fecha_hora
         );
 
-      const tresDiasAntes =
-        new Date(fecha);
+const apertura =
+  new Date(fecha);
 
-      tresDiasAntes.setDate(
-        tresDiasAntes.getDate() - 3
-      );
+apertura.setHours(
+  apertura.getHours() - 24
+);
 
-      const unDiaDespues =
-        new Date(fecha);
+const unDiaDespues =
+  new Date(fecha);
 
-      unDiaDespues.setDate(
-        unDiaDespues.getDate() + 1
-      );
+unDiaDespues.setDate(
+  unDiaDespues.getDate() + 1
+);
 
-      return (
-        ahora >= tresDiasAntes &&
-        ahora <= unDiaDespues
-      );
+return (
+  ahora >= apertura &&
+  ahora <= unDiaDespues
+);
 
     });
 
