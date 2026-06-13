@@ -84,16 +84,16 @@ apertura.setHours(
   apertura.getHours() - 24
 );
 
-const unDiaDespues =
+const despues =
   new Date(fecha);
 
-unDiaDespues.setDate(
-  unDiaDespues.getDate() + 1
+despues.setHours(
+  despues.getHours() + 15
 );
 
 return (
   ahora >= apertura &&
-  ahora <= unDiaDespues
+  ahora <= despues
 );
 
     });
@@ -326,7 +326,37 @@ const mensajes = [
   
     "📝 La literatura especializada no respalda necesariamente esta decisión.",
   
-    "🏆 Si este pronóstico se cumple, habrá que actualizar la teoría."
+    "🏆 Si este pronóstico se cumple, habrá que actualizar la teoría.",
+
+    "🏆 Este pronóstico no tiene relación significativa con el rendimiento.",
+
+    "📝 AVISO: El cálculo de este pronóstico ha sido generado sin pesos.",
+
+    "🔎 Este pronóstico se comporta de manera diferente por estrato.",
+
+    "🔎 Recuerda que las predicciones enviadas no forman parte de tu entregable de este mes.",
+
+    "🔎 lavaan WARNING: some estimated ov/lv variances are negative",
+
+    "🔎 lavaan WARNING: covariance matrix of latent variables is not positive definite",
+
+    "🔎 lavaan WARNING: An ultra-Heywood case was detected.",
+
+    "Tu pronóstico ha sido recibido y archivado conforme al procedimiento correspondiente. 📂",
+    
+    "Se registró la apuesta. El presupuesto emocional corre por tu cuenta. 💰",
+    
+    "El trámite fue aprobado sin observaciones. ✅",
+    
+    "No se encontraron inconsistencias administrativas en tu pronóstico. 📋",
+
+    "Se deja constancia de que este expediente fue presentado sin presión externa. ✍️",
+
+    "La unidad orgánica competente revisará su nivel de fe en ese resultado. 📊",
+
+    "Mesa de partes confirma la recepción de su optimismo deportivo. 📥"
+
+
   
   ];
 
